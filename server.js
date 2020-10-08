@@ -85,17 +85,15 @@ app.post('/api/comments', async (req, res) => {
    }
    const collection = app.locals.collection
    try {
-      await collection.insertOne(comment).then
+      const result = await collection.insertOne(comment)
          .catch(err => {
             console.log('[POST-ERROR with adding comment to DB]: ', err)
             res.sendStatus(500)
          })
+      await emailSender.sender(result.ops[0])
       res.sendStatus(200)
    } catch (err) {
       console.log('[POST-ERROR]: ', err);
       res.sendStatus(500)
    }
 })
-
-// updating the comment
-// app.get('/api')
