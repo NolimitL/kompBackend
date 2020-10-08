@@ -20,6 +20,7 @@ app.use(jsonParser);
             .then(() => console.log('[Connecting is successfully.]'))
             .catch(err => console.log('[ERROR with connecting to DB]:', err))
    app.locals.collection = mongoClient.db('komp-service').collection('comments')
+   app.locals.posCollect = mongoClient.db('komp-service').collection('position')
    app.listen(EVR.PORT, () => {
       console.log(`[Server has been started on port ${EVR.PORT} ...]`)
    })
@@ -97,3 +98,18 @@ app.post('/api/comments', async (req, res) => {
       res.sendStatus(500)
    }
 })
+
+// extra source from DB 
+// receiving a position
+app.get('/api/extra/position', async (req, res) => {
+   try {
+      const posC = app.locals.posCollect
+      const position = await posC.find({}).toArray()
+      res.status(200).send(position)
+   } catch (err) {
+      console.log('[ERROR with receiving a list of position]: ', err)
+      res.sendStatus(500)
+   }
+})
+
+//
