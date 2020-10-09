@@ -21,6 +21,8 @@ app.use(jsonParser);
             .catch(err => console.log('[ERROR with connecting to DB]:', err))
    app.locals.collection = mongoClient.db('komp-service').collection('comments')
    app.locals.posCollect = mongoClient.db('komp-service').collection('position')
+   app.locals.infoServiceCollect = mongoClient.db('komp-service').collection('service-info')
+   app.locals.cardViewCollect = mongoClient.db('komp-service').collection('card-view')
    app.listen(EVR.PORT, () => {
       console.log(`[Server has been started on port ${EVR.PORT} ...]`)
    })
@@ -103,13 +105,33 @@ app.post('/api/comments', async (req, res) => {
 // receiving a position
 app.get('/api/extra/position', async (req, res) => {
    try {
-      const posC = app.locals.posCollect
-      const position = await posC.find({}).toArray()
+      const posColl = app.locals.posCollect
+      const position = await posColl.find({}).toArray()
       res.status(200).send(position)
    } catch (err) {
       console.log('[ERROR with receiving a list of position]: ', err)
       res.sendStatus(500)
    }
 })
-
+// receiving a service-info
+app.get('/api/extra/service-info', async (req, res) => {
+   try {
+      const serviceColl = app.locals.infoServiceCollect
+      const info = await serviceColl.find({}).toArray()
+      info ? res.send(info) : res.sendStatus(404)
+   } catch (err) {
+      console.log('[ERROR with receiving a service info]: ', err)
+      res.sendStatus(500)
+   }
+})
 //
+app.get('/api/extra/card-view', async (req, res) => {
+   try {
+      const cardColl = app.locals.cardViewCollect
+      const cardView = await cardColl.find({}).toArray()
+      cardView ? res.send(cardView) : res.sendStatus(404)
+   } catch (err) {
+      console.log('[ERROR with receiving a card view]: ', err)
+      res.sendStatus(500)
+   }
+})
