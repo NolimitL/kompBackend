@@ -1,19 +1,27 @@
+// const https = require('https');
 const express = require('express');
+const path = require('path');
+const cors = require('cors');
 const bodyParser = require('body-parser');
+const compression = require('compression');
 const EVR = require('./environment');
-const emailSender = require('./email-sender')
+const emailSender = require('./email-sender');
 const MongoClient = require('mongodb').MongoClient;
 const Mongo = require('mongodb');
 
 
-const app = express()
+const app = express();
 const mongoClient = new MongoClient(EVR.DB_URI, {
    useNewUrlParser: true,
    useUnifiedTopology: true
-})
-const jsonParser = bodyParser.json()
+});
+const jsonParser = bodyParser.json();
 
 app.use(jsonParser);
+app.use(compression());
+app.use(cors({
+   origin: '*'
+}));
 
 (async () => {
    await mongoClient.connect()
@@ -23,9 +31,19 @@ app.use(jsonParser);
    app.locals.posCollect = mongoClient.db('komp-service').collection('position')
    app.locals.infoServiceCollect = mongoClient.db('komp-service').collection('service-info')
    app.locals.cardViewCollect = mongoClient.db('komp-service').collection('card-view')
+   // https.createServer({
+   //    key: fs.readFileSync('./cert/key.pem'),
+   //    cert: fs.readFileSync('./cert/cert.pem')
+   // }, app).listen(EVR.PORTsec, () => {
+   //    console.log(`[Server has been started on port ${EVR.PORTsec} ...]`)
+   // })
+   // app.use(express.static(path.join(__dirname, '../frontend/dist/frontend-Komp'))).listen(EVR.PORT, () => {
+   //    console.log(`[Server [PROD] has been started on port ${EVR.PORT} ...]`)
+   // })
+   // DEV 
    app.listen(EVR.PORT, () => {
-      console.log(`[Server has been started on port ${EVR.PORT} ...]`)
-   })
+         console.log(`[Server [DEV] has been started on port ${EVR.PORT} ...]`)
+      })
 })()
 
 // receiving all comments
@@ -33,7 +51,6 @@ app.get('/api/comments', async (req, res) => {
    const collection = app.locals.collection
    try {
       const commets = await collection.find({"allowed":true}).toArray()
-      console.log('Comments:', commets)
       res.send(commets)
    } catch (err) {
       console.log('[ERROR with searching]: ', err)
@@ -61,7 +78,6 @@ app.get('/api/comments/:id', async (req, res) => {
             console.log('[GET-ERROR with incorrected search]: ', err)
             return res.sendStatus(400)
          })
-      console.log('One comment:', comment) 
       if (comment === null) {
          res.sendStatus(404)
       }else{
@@ -107,7 +123,7 @@ app.get('/api/extra/position', async (req, res) => {
    try {
       const posColl = app.locals.posCollect
       const position = await posColl.find({}).toArray()
-      res.status(200).send(position)
+      res.status(200).send(position[0])
    } catch (err) {
       console.log('[ERROR with receiving a list of position]: ', err)
       res.sendStatus(500)
