@@ -37,9 +37,9 @@ app.use(cors({
    // }, app).listen(EVR.PORTsec, () => {
    //    console.log(`[Server has been started on port ${EVR.PORTsec} ...]`)
    // })
-   // app.use(express.static(path.join(__dirname, '../frontend/dist/frontend-Komp'))).listen(EVR.PORT, () => {
-   //    console.log(`[Server [PROD] has been started on port ${EVR.PORT} ...]`)
-   // })
+   // app.use(express.static(path.join(__dirname, '../frontend/dist/frontend-Komp'))).listen(EVR.PORTdev, () => {
+   //    console.log(`[Server [PROD] has been started on port ${EVR.PORTdev} ...]`)
+   // }) 
    // DEV 
    app.listen(EVR.PORT, () => {
          console.log(`[Server [DEV] has been started on port ${EVR.PORT} ...]`)
@@ -110,7 +110,7 @@ app.post('/api/comments', async (req, res) => {
             res.sendStatus(500)
          })
       await emailSender.sender(result.ops[0])
-      res.sendStatus(200)
+      res.status(200)
    } catch (err) {
       console.log('[POST-ERROR]: ', err);
       res.sendStatus(500)

@@ -28,7 +28,7 @@ module.exports.sender = async function _sendEmail(comment){
             <p>Кто написал: ${comment.name}</p>
             <p>Дата: ${new Date(comment.date)}</p>
             <p>Телефон: ${comment.phone}</p>
-            <p>Текст комментария: ${comment.text}</p>
+            <p>Текст отзыва: ${comment.text}</p>
          </div>
          <a style="
             display: block;
