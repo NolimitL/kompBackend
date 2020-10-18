@@ -20,7 +20,8 @@ const jsonParser = bodyParser.json();
 app.use(jsonParser);
 app.use(compression());
 app.use(cors({
-   origin: '*'
+   origin: 'http://localhost:4200'
+   // origin: ''
 }));
 
 (async () => {
@@ -92,7 +93,8 @@ app.get('/api/comments/:id', async (req, res) => {
 // addition a comment
 app.post('/api/comments', async (req, res) => {
    if (!req.body) {
-      return req.sendStatus(204)
+      return req.sendStatus(200)
+      // return req.sendStatus(204)
    }
    const comment = {
       name: req.body.name,
@@ -110,7 +112,7 @@ app.post('/api/comments', async (req, res) => {
             res.sendStatus(500)
          })
       await emailSender.sender(result.ops[0])
-      res.status(200)
+      res.status(200).header()
    } catch (err) {
       console.log('[POST-ERROR]: ', err);
       res.sendStatus(500)
