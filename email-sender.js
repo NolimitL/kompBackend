@@ -7,7 +7,7 @@ const transporter = nodemailer.createTransport({
       pass: 'ohrttuekbokbylme'
    }
 })
-const link = 'https://www.youtube.com/'
+const link = 'http://localhost:80'
 
 module.exports.sender = async function _sendEmail(comment){
    await transporter.sendMail({
@@ -21,7 +21,6 @@ module.exports.sender = async function _sendEmail(comment){
           <meta charset="UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <title>Document</title>
-          <script src="training.js" type="text/javascript"></script>
       </head>
       <body>
          <div>
@@ -43,7 +42,7 @@ module.exports.sender = async function _sendEmail(comment){
             font-size: 14px;
             font-weight: 600;
             text-align: center;
-         " href="${link}" target="_blank">Подтвердить комментарий</a>
+         " href="${link}/api/extra/comments-permit/allowed/${comment._id}" target="_blank">Подтвердить комментарий</a>
       </body>
       </html>`
    }, ((err, info) => {
