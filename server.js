@@ -19,7 +19,7 @@ const jsonParser = bodyParser.json();
 app.use(jsonParser);
 app.use(compression());
 app.use(cors({
-   origin: 'https://arcane-eyrie-08578.herokuapp.com'
+   origin: 'https://komp-service.herokuapp.com'
 }));
 
 (async () => {
