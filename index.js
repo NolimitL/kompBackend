@@ -1,4 +1,5 @@
 const express = require('express');
+const router = express.Router();
 const path = require('path');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -45,6 +46,11 @@ app.use(cors({
    //       console.log(`[Server [DEV] has been started on port ${EVR.PORTdev} ...]`)
    //    })
 })()
+
+//Routing 
+app.use(express.static(path.join(__dirname, './dist/frontend-Komp')))
+   .use('/home', (req, res) => {
+});
 
 // receiving all comments
 app.get('/api/comments', async (req, res) => {
